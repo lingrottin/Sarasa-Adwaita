@@ -1,0 +1,95 @@
+{
+  // 上游仓库（保持干净，不直接改动）
+  "upstream": {
+    "adwaitaFonts": {
+      "url": "https://github.com/GNOME/adwaita-fonts.git",
+      "ref": "main"
+    },
+    "sarasaGothic": {
+      "url": "https://github.com/be5invis/Sarasa-Gothic.git",
+      "ref": "main"
+    }
+  },
+  // 项目路径
+  "paths": {
+    "upstream": "upstream",
+    "target": "target"
+  },
+  // 补丁与模板
+  "patches": {
+    "adwaitaMonoWeights": "patches/adwaita-mono-weights.toml"
+  },
+  // Adwaita Sans 变量字体切片
+  "adwaitaSans": {
+    "opsz": 14,
+    "weights": [200, 300, 400, 600, 700]
+  },
+  // Adwaita Mono Iosevka build plan
+  "adwaitaMono": {
+    "buildPlanName": "AdwaitaMono",
+    "buildPlanPath": "mono/private-build-plans.toml",
+    "weights": [200, 300, 400, 600, 700]
+  },
+  // Sarasa 配置覆盖
+  "sarasa": {
+    "familyOrder": ["Gothic", "Ui", "Mono"],
+    "familyNames": {
+      "gothic": {
+        "en_US": "Sarasa Adwaita Gothic",
+        "zh_CN": "更纱独黑",
+        "zh_TW": "更紗獨黑",
+        "zh_HK": "更紗獨黑",
+        "ja_JP": "更紗アドワイタ ゴシック",
+        "ko_KR": "사라사 어드와이타 고딕"
+      },
+      "ui": {
+        "en_US": "Sarasa Adwaita UI",
+        "zh_CN": "更纱独黑 UI",
+        "zh_TW": "更紗獨黑 UI",
+        "zh_HK": "更紗獨黑 UI",
+        "ja_JP": "更紗アドワイタ UI",
+        "ko_KR": "사라사 어드와이타 UI"
+      },
+      "mono": {
+        "en_US": "Sarasa Adwaita Mono",
+        "zh_CN": "等距更纱独黑",
+        "zh_TW": "等距更紗獨黑",
+        "zh_HK": "等距更紗獨黑",
+        "ja_JP": "等幅更紗アドワイタ モノ",
+        "ko_KR": "사라사 어드와이타 모노"
+      }
+    },
+    "latinGroups": {
+      "sans": "AdwaitaSans",
+      "mono": "AdwaitaMonoN",
+      "monoFixed": "AdwaitaMonoNFixed"
+    },
+    "adwaitaSansDropFeatures": [
+      "cv01",
+      "cv02",
+      "cv03",
+      "cv04",
+      "cv05",
+      "cv06",
+      "cv07",
+      "cv08",
+      "cv09",
+      "cv10",
+      "cv11",
+      "cv12",
+      "cv13",
+      "ss01",
+      "ss02",
+      "ss03",
+      "ss04",
+      "ss05",
+      "ss06",
+      "ss07",
+      "ss08"
+    ]
+  },
+  // 构建选项
+  "build": {
+    "sarasaTarget": "ttf"
+  }
+}

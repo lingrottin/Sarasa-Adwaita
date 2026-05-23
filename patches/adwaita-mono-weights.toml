@@ -1,0 +1,14 @@
+[buildPlans.AdwaitaMono.weights.ExtraLight]
+shape = 200
+menu = 200
+css = 200
+
+[buildPlans.AdwaitaMono.weights.Light]
+shape = 300
+menu = 300
+css = 300
+
+[buildPlans.AdwaitaMono.weights.SemiBold]
+shape = 600
+menu = 600
+css = 600
