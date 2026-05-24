@@ -13,25 +13,52 @@ Read more [below](#detailed-introduction).
 
 ## Note
 
-**Sarasa Adwaita Mono is not intended for terminal use**. Unlike the original Sarasa Mono, which uses Iosevka with default parameters, Sarasa Adwaita Mono uses Adwaita Mono (Iosevka with customized parameters). Adwaita Mono is wider than the default Iosevka. As a result, the ratio of the width of CJK characters to Western characters is **not** 2:1 in Sarasa Adwaita Mono (but 2:1.2 approx.) In contrast, Sarasa Mono handles this well. Thus, in terminals, Sarasa Mono is recommended over this.
+**Sarasa Adwaita Mono is not intended for terminal use**. Unlike the original Sarasa Mono, which uses Iosevka with default parameters, Sarasa Adwaita Mono uses Adwaita Mono (Iosevka with customized parameters). Adwaita Mono is wider than the default Iosevka. As a result, the ratio of the width of CJK characters to Western characters is **not** 2:1 in Sarasa Adwaita Mono (2:1.2 approx.) In contrast, Sarasa Mono handles this well. Thus, in terminals, Sarasa Mono is recommended over this.
 
 It is highly recommended to completely remove the old version of the fonts before you install the newer version of this font. Many OSes' and softwares' caching system may have trouble when dealing with large TTC fonts.
 
 ## Usage
 
+
+
 ### Prebuilt TTF/TTC Files
 
-~~Download the font from [releases page](https://github.com/lingrottin/Sarasa-Adwaita/releases) and install.~~ *(not available yet!)*
+Download the font from [releases page](https://github.com/lingrottin/Sarasa-Adwaita/releases) and install.
+
+> [!NOTE]
+> The prebuilt Sarasa Adwaita files use [ttfautohint](https://freetype.org/ttfautohint/) instead of [chlorophytum](https://github.com/chlorophytum/engine). This means that Sarasa Adwaita may look worse than Sarasa Gothic on lower resolutions.
+> 
+> See why and why we do the replacement [below](#why-ttfautohint-over-chlorophytum).
 
 ### Build from Source
 
 > [!WARNING]
 > 
-> To build this font requires ***extremely high*** amount of time, CPU and memory. I rented a 128-vCPU machine with 128GB of memory for this, and it spent *hours* of time and as of writing it has not finished yet! An OOM Killer was even triggered during the process. 
-> 
-> Luckily, the main workload is in the hinting steps, which analyze the **generated** font and produce hints. If you don't need [hinting](https://en.wikipedia.org/wiki/Font_hinting), you can just terminate the build process once you see hundreds of `SarasaAdwaita***.ttf` appear in `target/work/Sarasa-Gothic/out/TTF-Unhinted`. But this still costs a lot of time and CPU even before hinting though.
+> Building this font requires a significant amount of time, CPU and memory. For reference, ~2.5 hours on an AMD Ryzen 5 7735HS machine was spent.
 
 See [Building](/BUILDING.md) for more details.
+
+#### Why ttfautohint over chlorophytum?
+
+<details>
+<summary>TL;DR: chlorophytum is too slow (with it the total build would take 300+ hours), ttfautohint is much faster.</summary>
+ 
+[Hinting](https://en.wikipedia.org/wiki/Font_hinting) is a technique to make fonts look better, especially on lower resolutions.
+
+[Chlorophytum](https://github.com/chlorophytum/engine) is a fantastic font hinting engine by the author of Iosevka and Sarasa Gothic.
+
+It is designed especially for CJK glyphs, providing an *"intention based"* analysis upon those glyphs based on the inner, shared features under CJK characters.
+
+This engine is used in Sarasa Gothic's build pipelines to provide precise hints, and, as we could see, it worked well.
+
+But it is **too** heavy and slow. Analyzing a glyph with such a complex algorithm requires much compute workload, and Sarasa Gothic is a font with 30k+ glyphs and 180 versions. Hinting 30k+ glyphs with chlorophytum, according to my runs, needs 1.7 hours of work on a 128-CPU machine. The complete hinting time adds up to ***~306*** hours. (12 days and 18 hours)
+
+Instead, ttfautohint is another hinting tool. Although it is not especially designed for CJK glyphs (and the results may be worse than chlorophytum), it can produce hints *much* faster. Hinting a font file with ttfautohint only takes <1min, and this makes the build time acceptable.
+
+So, by default, Sarasa Adwaita's build pipeline tells Sarasa Gothic's build pipeline to produce unhinted TTFs, and hints them with ttfautohint on its own.
+
+And also for this reason, Sarasa Adwaita may look worse on lower resolutions than Sarasa Gothic. 
+</details>
 
 ### Variants' Names
 
@@ -39,13 +66,18 @@ See [Building](/BUILDING.md) for more details.
 	- Latin/Greek/Cyrillic character set being Inter
 		- Quotes (“”) are full width —— Gothic
 		- Quotes (“”) are narrow —— UI
-	- Latin/Greek/Cyrillic character set being Iosevka
+	- Latin/Greek/Cyrillic character set being Iosevka (monospace)
 		- Em dashes (——) are full width —— Mono
 		- Em dashes (——) are half width —— Term
 		- No ligature, Em dashes (——) are half width —— Fixed
 - Orthography dimension
-	- CL: Classical orthography
-	- SC, TC, J, K, HC: Regional orthography, following [Source Han Sans](https://github.com/adobe-fonts/source-han-sans) notations.
+	- CL: Classical orthography from [Shanggu](https://github.com/GuiWonder/Shanggu) Project.
+	- SC/TC/HC/J/K: Regional orthography, used respectively in:
+		- SC (Simplified Chinese): China Mainland.
+		- TC (Traditional Chinese): Taiwan, China.
+		- HC (Hong Kong Chinese): Hong Kong SAR., China.
+		- J (Japanese): Japan.
+		- K (Korean): Korea.
 
 ## Detailed Introduction
 
@@ -74,6 +106,17 @@ I name this font, the GNOME-flavored Sarasa Gothic, Sarasa Adwaita.
 The word Adwaita comes from Sanskrit and means "The Only".
 
 The Chinese name of this font (更纱*独*黑) is basically a direct translation of the English name, "Sarasa 'Only' Sans-serif", where "Adwaita" is interpreted as its original meanings in Sanskrit.
+
+## Copyright
+
+*This project is not affiliated with, funded, endorsed, or supported by Sarasa Gothic's author or the GNOME Project.*
+
+I claim no copyright on Sarasa Adwaita, Sarasa Gothic or Adwaita fonts. The copyright of this project goes to:
+
+- [Renzhi Li](https://typeof.net/), for Sarasa Gothic and its fine-tuning on some glyphs, and Iosevka.
+- [Rasmus](https://rsms.me), for Inter.
+- The GNOME Project, for Adwaita fonts.
+- Google and/or Adobe, for Noto Fonts and/or Source Fonts.
 
 ## Acknowledgements
 

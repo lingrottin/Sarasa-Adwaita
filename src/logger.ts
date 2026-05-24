@@ -40,7 +40,8 @@ export class Logger {
   }
 
   private writeLine(level: string, message: string): void {
-    const line = `[${level}] ${message}`;
+    const ts = new Date().toISOString().replace("T", " ").replace(/\.\d+Z$/, "");
+    const line = `[${ts}] [${level}] ${message}`;
     this.stream.write(`${line}\n`);
     if (level === "ERROR") {
       console.error(line);

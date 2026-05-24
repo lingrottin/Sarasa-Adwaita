@@ -89,6 +89,7 @@
     ]
   },
   // 构建选项
+  // 构建选项
   "build": {
     "sarasaTarget": "ttf"
   }

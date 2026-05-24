@@ -44,7 +44,7 @@ export interface ProjectConfig {
     adwaitaSansDropFeatures: string[];
   };
   build?: {
-    sarasaTarget?: "ttf" | "ttc";
+    sarasaTarget?: string;
   };
 }
 
@@ -67,7 +67,7 @@ export interface ResolvedConfig extends ProjectConfig {
     adwaitaMonoWeights: string;
   };
   build: {
-    sarasaTarget: "ttf" | "ttc";
+    sarasaTarget: string;
   };
 }
 

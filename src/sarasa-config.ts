@@ -41,6 +41,11 @@ async function patchVerdafilePrefix(workDir: string): Promise<void> {
     /const JHint = oracle\("hinting-jobs", async \(\) => os\.cpus\(\)\.length\);/,
     'const JHint = oracle("hinting-jobs", async () => Math.min(os.cpus().length, 64));'
   );
+  // ttf target: only build TTF-Unhinted, skip Sarasa's own hinting (we use ttfautohint)
+  content = content.replace(
+    /await t\.need\(TtfFontFiles`TTF`, TtfFontFiles`TTF-Unhinted`\);/,
+    "await t.need(TtfFontFiles`TTF-Unhinted`);"
+  );
   await fs.writeFile(verdafile, content, "utf8");
 }
 

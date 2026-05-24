@@ -18,6 +18,7 @@ export interface PipelineOptions {
   clean?: boolean;
   skipAdwaitaMono?: boolean;
   skipAdwaitaSans?: boolean;
+  skipSarasa?: boolean;
 }
 
 async function requireCommand(cmd: string, logger: Logger): Promise<void> {
@@ -29,17 +30,22 @@ async function requireCommand(cmd: string, logger: Logger): Promise<void> {
   }
 }
 
-async function prepareTarget(paths: {
-  target: string;
-  work: string;
-  artifacts: string;
-  dist: string;
-  cache: string;
-  reports: string;
-  logs: string;
-}): Promise<void> {
+async function prepareTarget(
+  paths: {
+    target: string;
+    work: string;
+    artifacts: string;
+    dist: string;
+    cache: string;
+    reports: string;
+    logs: string;
+  },
+  skipSarasa?: boolean
+): Promise<void> {
   await ensureDir(paths.target);
-  await emptyDir(paths.work);
+  if (!skipSarasa) {
+    await emptyDir(paths.work);
+  }
   await ensureDir(paths.artifacts);
   await emptyDir(paths.dist);
   await ensureDir(paths.cache);
@@ -71,7 +77,7 @@ async function sansArtifactsExist(config: ResolvedConfig): Promise<boolean> {
 
 export async function runPipeline(options: PipelineOptions): Promise<void> {
   const config = await loadConfig(options.configPath);
-  const logFile = path.join(config.paths.logs, `run-${Date.now()}.log`);
+  const logFile = path.join(config.paths.logs, `run-${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
   const logger = await Logger.create(logFile);
   const env = { ...process.env, GIT_TERMINAL_PROMPT: "0" };
   const baseOptions = { logger, dryRun: options.dryRun, env };
@@ -88,8 +94,25 @@ export async function runPipeline(options: PipelineOptions): Promise<void> {
     if (options.clean) {
       await emptyDir(config.paths.target);
     }
-    await prepareTarget(config.paths);
+    await prepareTarget(config.paths, options.skipSarasa);
     await ensureDir(config.paths.upstream);
+
+    if (options.skipSarasa) {
+      logger.info("Skipping Sarasa build (--skip-sarasa) — reusing existing TTF-Unhinted.");
+      // Still need to run ttfautohint + TTC on the existing build output
+      const sarasaOutputDir = await buildSarasa(config, { ...baseOptions, skipBuild: true });
+      await writeBuildReport(config, {
+        adwaitaCommit: "(skipped)",
+        sarasaCommit: "(skipped)",
+        iosevkaVersion: "(skipped)",
+        patchedWeights: ["(skipped)"],
+        sarasaOutputDir,
+        adwaitaSansDir: "(skipped)",
+        adwaitaMonoDir: "(skipped)"
+      });
+      logger.info("Pipeline completed (skip-sarasa).");
+      return;
+    }
 
     await ensureRepo(
       path.join(config.paths.upstream, "adwaita-fonts"),
@@ -169,7 +192,7 @@ export async function runPipeline(options: PipelineOptions): Promise<void> {
 
 export async function fetchUpstream(options: PipelineOptions): Promise<void> {
   const config = await loadConfig(options.configPath);
-  const logFile = path.join(config.paths.logs, `fetch-${Date.now()}.log`);
+  const logFile = path.join(config.paths.logs, `fetch-${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
   const logger = await Logger.create(logFile);
   const env = { ...process.env, GIT_TERMINAL_PROMPT: "0" };
   const baseOptions = { logger, dryRun: options.dryRun, env };
@@ -195,7 +218,7 @@ export async function fetchUpstream(options: PipelineOptions): Promise<void> {
 
 export async function cleanTarget(options: PipelineOptions): Promise<void> {
   const config = await loadConfig(options.configPath);
-  const logFile = path.join(config.paths.logs, `clean-${Date.now()}.log`);
+  const logFile = path.join(config.paths.logs, `clean-${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
   const logger = await Logger.create(logFile);
 
   try {

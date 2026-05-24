@@ -2,6 +2,9 @@
 
 This file contains the basic development and build instructions for Sarasa Adwaita.
 
+> [!NOTE]
+> Since this project is vibe-coded, instructing an AI agent to build this is recommended, for AI-written documents may **not** cover all the details, while debugging as a human requires a lot of time and effort.
+
 ## Directory Structure
 
 ```
@@ -73,7 +76,8 @@ pnpm run build
 ### 7. Run Sarasa-Gothic build
 
 - Execute `npm run build -- ttf` in Sarasa-Gothic work directory
-- Wait for all TTFs to be generated (with hinting)
+- Generates 180 unhinted TTF files (`TTF-Unhinted`) — Sarasa's own hinting is now skipped
+- After Sarasa build finishes, our pipeline applies ttfautohint to all unhinted TTFs, then packages them into TTC files
 
 ### 8. Collect build artifacts
 
@@ -86,6 +90,8 @@ The project supports incremental builds:
 
 - If `target/cache/Iosevka-*.zip` exists, download is skipped
 - If Adwaita Mono TTFs exist, build is skipped (use `--skip-adwaita-mono` to force skip)
+- If Adwaita Sans TTFs exist, build is skipped (use `--skip-adwaita-sans` to force skip)
+- If TTF-Unhinted files exist, Sarasa-Gothic rebuild is skipped (use `--skip-sarasa` to force skip)
 - Same Sarasa-Gothic work copy is reused
 
 Available flags:
@@ -93,16 +99,18 @@ Available flags:
 ```bash
 pnpm run build -- --skip-adwaita-mono   # Skip Adwaita Mono build
 pnpm run build -- --skip-adwaita-sans   # Skip Adwaita Sans build
+pnpm run build -- --skip-sarasa         # Skip Sarasa-Gothic rebuild (reuse existing TTF-Unhinted)
 ```
 
 ## Build Time & Resources
 
 Building Sarasa Adwaita requires significant computational resources:
 
-- **TTF-Unhinted phase** (~30 min on 16-core machine): Generates 180 unhinted TTF files. Most time spent on CJK glyph composition and compilation.
-- **Hinting phase** (~7-8 hours on 128-core server): CJK glyph hinting uses the chlorophytum engine, performing multi-pass analysis (kanji0 → hangul0 → pass1 → pass2) on 300000+ CJK glyphs per weight. This phase is memory-bandwidth-bound; with 128 worker threads, each ~1-1.5GB RSS, OOM is likely. Recommend capping `--jobs` at 64.
+- **TTF-Unhinted phase** (~30 min on 16-core machine, ~1.5h on 2-core): Generates 180 unhinted TTF files. Most time spent on CJK glyph composition and compilation.
+- **ttfautohint phase** (~3 min on 16-core machine, parallel): Applies [ttfautohint](https://www.freetype.org/ttfautohint) to all 180 unhinted TTFs in parallel. Each font takes <15 seconds. Significantly faster than the original chlorophytum pipeline, which took ~1.7 hours per font (~100+ hours total for all 180 fonts on a 128-core server).
+- **TTC packaging** (~10 min): Bundles hinted TTFs into TTC files using `otb-ttc-bundle`.
 
-Tip: If hinting is not needed, abort the build after the TTF-Unhinted phase completes. The unhinted fonts are usable in most scenarios.
+Tip: If hinting is not needed, the pipeline can be interrupted after the TTF-Unhinted phase completes. Unhinted fonts work well in most modern rendering environments.
 
 ## Output Font Naming
 
@@ -117,7 +125,6 @@ File prefix unified to `SarasaAdwaita`, e.g., `SarasaAdwaitaGothicSC-Regular.ttf
 ## Troubleshooting
 
 - **otc2otf not found**: Install Python AFDKO package (`pip install afdko`)
-- **OOM killed**: Reduce hinting parallelism (cap `os.cpus().length` in verdafile.mjs)
 - **Build stuck at clone**: Check network connectivity to GitHub
 
 ## Reference Links

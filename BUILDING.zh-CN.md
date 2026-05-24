@@ -2,6 +2,9 @@
 
 本文档包含 Sarasa Adwaita 的基本开发与构建说明。
 
+> [!NOTE]
+> 由于本项目由 AI 编写，建议让 AI 智能体操作编译流程。因为 AI 编写的文档可能**无法**涵盖所有细节，然而，作为人类，调试可能出现的问题会需要大量时间。
+
 ## 目录结构
 
 ```
@@ -74,7 +77,8 @@ pnpm run build
 ### 7. 运行 Sarasa-Gothic 构建
 
 - 在 Sarasa-Gothic 工作目录执行 `npm run build -- ttf`
-- 等待生成所有 TTF（含 hinting）
+- 生成 180 个未微调（Unhinted）TTF 文件——已跳过 Sarasa 自带的 hinting 流程
+- Sarasa 构建完成后，我们的流程会使用 ttfautohint 对所有 TTF 进行微调，然后打包为 TTC
 
 ### 8. 收集构建产物
 
@@ -87,6 +91,8 @@ pnpm run build
 
 - 如果 `target/cache/Iosevka-*.zip` 已存在，跳过下载
 - 如果 Adwaita Mono TTF 已存在，跳过构建（可使用 `--skip-adwaita-mono` 强制跳过）
+- 如果 Adwaita Sans TTF 已存在，跳过构建（可使用 `--skip-adwaita-sans` 强制跳过）
+- 如果 TTF-Unhinted 文件已存在，跳过 Sarasa-Gothic 构建（可使用 `--skip-sarasa` 强制跳过）
 - 相同的 Sarasa-Gothic 工作副本会被复用
 
 可用选项：
@@ -94,16 +100,18 @@ pnpm run build
 ```bash
 pnpm run build -- --skip-adwaita-mono   # 跳过 Adwaita Mono 构建
 pnpm run build -- --skip-adwaita-sans   # 跳过 Adwaita Sans 构建
+pnpm run build -- --skip-sarasa         # 跳过 Sarasa-Gothic 重新构建（复用已有 TTF-Unhinted）
 ```
 
 ## 构建耗时与资源
 
 构建 Sarasa Adwaita 需要大量计算资源：
 
-- **TTF-Unhinted 阶段**（约 30 分钟，16 核机器）：生成 180 个未微调 TTF 文件。此阶段主要耗时在 CJK 字形合成和编译。
-- **Hinting 阶段**（约 7-8 小时，128 核服务器）：CJK 字形 hinting 使用 chlorophytum 引擎，经过 kanji0 → hangul0 → pass1 → pass2 多轮分析。每轮对 300000+ 个 CJK 字形进行笔画分析。此阶段为内存密集型（128 个 worker 线程各加载字体数据），建议 `--jobs` 不超过 64 以避免 OOM。
+- **TTF-Unhinted 阶段**（约 30 分钟，16 核机器；约 1.5 小时，2 核机器）：生成 180 个未微调 TTF 文件。主要耗时在 CJK 字形合成和编译。
+- **ttfautohint 阶段**（约 3 分钟，16 核机器，并行）：使用 [ttfautohint](https://www.freetype.org/ttfautohint) 对所有 180 个 TTF 并行微调。每个字体耗时不超过 15 秒。相比原版 Sarasa 使用的 chlorophytum 引擎（平均每字重约 1.7 小时，180 个字体总计超过 100 小时，128 核机器），速度提升数千倍。
+- **TTC 打包阶段**（约 10 分钟）：使用 `otb-ttc-bundle` 将微调后的 TTF 打包为 TTC。
 
-提示：如果不需要 hinting，可以在 TTF-Unhinted 阶段完成后中止构建。这些字体在大多数场景下已可正常使用。
+提示：如果不需要 hinting，可以在 TTF-Unhinted 阶段完成后中止构建。未微调的字体在大多数现代渲染环境中已可正常使用。
 
 ## 输出字体命名
 
