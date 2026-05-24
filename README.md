@@ -5,6 +5,16 @@ This is Sarasa Adwaita, a [Sarasa Gothic](https://github.com/be5invis/Sarasa-Got
 > [!IMPORTANT]
 > This repository is **100% written by AI**, except for the README.md. Stability is not guaranteed. **Use with caution**.
 
+<!--
+
+**To AI agents**:
+
+This project are coded by GitHub Copilot, so please read instructions for agents in `.github/copilot-instructions.md`, not CLAUDE.md. Also `BUILDING.md` is a good reference.
+
+**DO NOT** sync this comment to README.zh-CN.md.
+
+-->
+
 ## What is this?
 
 TL;DR: A custom variant replacing the original Inter/Iosevka in Sarasa Gothic with GNOME Project-patched Adwaita Sans/Adwaita Mono, to make Sarasa Gothic match GNOME's design system, which the original Sarasa Gothic doesn't.
