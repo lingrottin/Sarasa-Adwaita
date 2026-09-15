@@ -1,13 +1,16 @@
 # Sarasa Adwaita (更纱独黑 / 更紗獨黑 / 更紗アドワイタ ゴシック / 사라사 어드와이타 고딕)
 
+![Sarasa Adwaita font specimen](assets/image1.png)
+
 This is Sarasa Adwaita, a [Sarasa Gothic](https://github.com/be5invis/Sarasa-Gothic) variant to match GNOME's design system.
 
-> [!IMPORTANT]
-> This repository is **100% written by AI**, except for the README.md. Stability is not guaranteed. **Use with caution**.
+<!-- AI stability warning removal: I have been using this font for months uneventfully -->
 
 ## What is this?
 
 TL;DR: A custom variant replacing the original Inter/Iosevka in Sarasa Gothic with GNOME Project-patched Adwaita Sans/Adwaita Mono, to make Sarasa Gothic match GNOME's design system, which the original Sarasa Gothic doesn't.
+
+![Sarasa Adwaita and Sarasa Gothic comparison](assets/image2.png)
 
 Read more [below](#detailed-introduction).
 
@@ -15,11 +18,11 @@ Read more [below](#detailed-introduction).
 
 **Sarasa Adwaita Mono is not intended for terminal use**. Unlike the original Sarasa Mono, which uses Iosevka with default parameters, Sarasa Adwaita Mono uses Adwaita Mono (Iosevka with customized parameters). Adwaita Mono is wider than the default Iosevka. As a result, the ratio of the width of CJK characters to Western characters is **not** 2:1 in Sarasa Adwaita Mono (2:1.2 approx.) In contrast, Sarasa Mono handles this well. Thus, in terminals, Sarasa Mono is recommended over this.
 
+![Sarasa Adwaita Mono and Sarasa Gothic Mono width comparison](assets/image3.png)
+
 It is highly recommended to completely remove the old version of the fonts before you install the newer version of this font. Many OSes' and softwares' caching system may have trouble when dealing with large TTC fonts.
 
 ## Usage
-
-
 
 ### Prebuilt TTF/TTC Files
 
