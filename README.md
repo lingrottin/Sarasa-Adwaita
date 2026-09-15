@@ -120,7 +120,7 @@ I do not claim copyright in my original contributions to this project.
 
 Copyright notices for the incorporated works:
 
-* Sarasa Gothic / Sarasa Mono — © 2014–2024 Renzhi Li
+* Sarasa Gothic / Iosevka — © 2014–2024 Renzhi Li
 * Inter — © 2014–2024 The Inter Project Authors
 * Adwaita Sans / Adwaita Mono — © 2023–2024 GNOME Foundation
 * Noto Sans CJK — © Google LLC and Adobe

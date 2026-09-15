@@ -1,19 +1,22 @@
 # Sarasa Adwaita（更纱独黑 / 更紗獨黑 / 更紗アドワイタ ゴシック / 사라사 어드와이타 고딕）
 
-这是 Sarasa Adwaita，一款为了匹配 GNOME 设计系统而制作的 [Sarasa Gothic](https://github.com/be5invis/Sarasa-Gothic) 变体。
+![Sarasa Adwaita 字体样张](assets/image1.png)
 
-> [!IMPORTANT]
-> 本仓库**除 README.md 外 100% 由 AI 编写**。稳定性不作保证。**请谨慎使用**。
+这是 Sarasa Adwaita，一款为了匹配 GNOME 设计系统而制作的 [Sarasa Gothic](https://github.com/be5invis/Sarasa-Gothic) 变体。
 
 ## 这是什么？
 
 TL;DR: 将 Sarasa Gothic 原版中的 Inter/Iosevka 字体替换为 GNOME 项目定制的 Adwaita Sans/Adwaita Mono，使 Sarasa Gothic 匹配 GNOME 的设计系统。
+
+![Sarasa Adwaita 与 Sarasa Gothic 对比](assets/image2.png)
 
 详见下文[详细介绍](#详细介绍)。
 
 ## 注意事项
 
 **Sarasa Adwaita Mono 不推荐在终端中使用**。原版 Sarasa Mono 使用默认参数的 Iosevka，而 Sarasa Adwaita Mono 使用 Adwaita Mono（经定制的 Iosevka）。Adwaita Mono 比默认 Iosevka 更宽，导致 Sarasa Adwaita Mono 的中英文宽度之比不是 2:1，而是约 2:1.2。原版 Sarasa Mono 在此方面表现更好，因此终端场景仍推荐使用 Sarasa Mono。
+
+![Sarasa Adwaita Mono 与 Sarasa Gothic Mono 宽度对比](assets/image3.png)
 
 强烈建议在安装新版本字体前完全移除旧版本。许多操作系统和软件在处理大型 TTC 字体时，缓存系统可能出现问题。
 
@@ -64,7 +67,7 @@ TL;DR: 将 Sarasa Gothic 原版中的 Inter/Iosevka 字体替换为 GNOME 项目
     - 破折号（——）为全宽 —— Mono
     - 破折号（——）为半宽 —— Term
     - 无连字，破折号（——）为半宽 —— Fixed
-- 按正字法
+- 按字形
   - CL：传统字形，来自[尙古](https://github.com/GuiWonder/Shanggu)项目
   - SC/TC/HC/J/K：各区域的字形，分别用于：
     - SC（简体中文）：中国大陆
@@ -105,12 +108,24 @@ Adwaita 一词来自梵语，意为"独一无二的"。
 
 *本项目与 Sarasa Gothic 作者或 GNOME 项目无任何关联、资助、认可或支持关系。*
 
-本人对 Sarasa Adwaita、Sarasa Gothic 及 Adwaita 字体不主张任何版权。本项目涉及的版权归属于：
+本项目包含并衍生自下列版权持有者的作品。这些作品的版权仍归其各自的版权持有者所有。
 
-- [Renzhi Li](https://typeof.net/)。感谢他创作的 Sarasa Gothic 及其对部分字形的精调，以及 Iosevka 字体。
-- [Rasmus](https://rsms.me)。感谢他创作的 Inter 字体。
-- GNOME 项目。感谢他们创作的 Adwaita 字体系列。
-- Google 和/或 Adobe。感谢他们创作的 Noto 字体系列和/或思源字体系列。
+本人不主张对本项目中的原创贡献享有版权。
+
+所包含作品的版权声明：
+
+- Sarasa Gothic / Iosevka — © 2014–2024 Renzhi Li
+- Inter — © 2014–2024 The Inter Project Authors
+- Adwaita Sans / Adwaita Mono — © 2023–2024 GNOME Foundation
+- Noto Sans CJK — © Google LLC and Adobe
+
+## 许可证
+
+本项目生成的字体文件采用 SIL Open Font License 1.1 版授权。适用的版权声明和许可条款请参见 [LICENSE](./LICENSE)。
+
+用于构建字体的构建脚本、配置文件及其他原创源代码均以 The Unlicense 发布到公有领域。请参见 [UNLICENSE](./UNLICENSE)。
+
+上述许可证仅适用于所述的相应材料，不会改变本项目中所包含的任何第三方作品的版权或许可条款。
 
 ## 致谢
 
